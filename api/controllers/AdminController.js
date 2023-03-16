@@ -13,6 +13,8 @@ module.exports = {
     
     // admin login 
     login: function(req, res){
+        try{
+
         const { email, password } = req.body;
 
         console.log('login', req.body);
@@ -70,11 +72,12 @@ module.exports = {
                     
                 }
             });
-        }).catch((err)=>{
-            return res.status(400).json({
-                err:err
-            })
         })
+    }catch(err){
+        return res.status(400).json({
+            err:err
+        })
+    }
     },
 
     // admin logout

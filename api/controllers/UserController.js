@@ -256,7 +256,7 @@ module.exports = {
                 message: 'User Name already exists'
             })
         }
-
+        console.log(req.file('profilePic'));
         // uploading the updated one profile pic to path
         req.file('profilePic').upload({
             dirname: sails.config.appPath+ '/assets/images/profilePic/'
@@ -284,11 +284,7 @@ module.exports = {
                 data: result1,
                 message: "Profile Updated Successfully"
             })
-        }).catch((err)=>{
-            return res.status(400).json({
-                err:err
-            })
-        });
+        })
     }catch(err){
         return res.status(400).json({
             err:err
