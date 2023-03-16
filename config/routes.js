@@ -21,9 +21,6 @@ module.exports.routes = {
 
   '/': { view: 'pages/homepage' },
 
-  // admin signup
-  'POST /signup' : 'AdminController.signup',
-
   // admin login
   'POST /login' : 'AdminController.login',
 

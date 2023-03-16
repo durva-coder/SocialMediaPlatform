@@ -313,10 +313,6 @@ module.exports = {
         let posts = await User.findOne({where:{id : userId},  select: constants.GET_USER_FIELDS})
         .populate('posts', {sort: 'createdAt DESC', limit:limit, skip:limit*skip})
 
-        // all the posts
-        // let posts = await Post.find({}).limit(limit).skip(skip*limit).sort([
-        //     { createdAt: 'DESC' },
-        // ]);
         console.log(posts);
         return res.status(200).json({
             status: 200,
@@ -429,20 +425,6 @@ module.exports = {
             })
         }
 
-        // await Post.removeFromCollection(postId, 'likes', user1)
-       
-
-        // let post2 = await Post.find({id: postId}).populate('likes', { select: constants.GET_USER_FIELDS });
-        // console.log('hfhfghj',post2);
-
-        // await User.removeFromCollection(user1, 'likedPosts', postId)
-       
-
-        // return res.status(200).json({
-        //     status: 200,
-        //     data: post2,
-        //     message: 'Post Liked'
-        // })
     },
 
     // add comments to posts
@@ -504,42 +486,6 @@ module.exports = {
         // other user's ID whom profile to be see by user1
         let user2 = req.query.userId;
         console.log('user2', user2);
-
-        // checking the condition if user2 is there in a following list of user1 then show user2's profile to user1
-        // find the id's of user1's following list
-        // let user1Following = await User.findOne({id: user1}).populate('following', { select: ['id'] })
-        // console.log(user1Following);
-        // let ids = user1Following.following;
-
-        // // if id is present then show the user's details
-        // if(ids.length > 0){
-        //     let isLiked = ids.some((idObj) => {
-        //         return idObj.id === user2;
-        //     })
-        //     console.log(isLiked);
-
-        //     // true condition
-        //     if(isLiked){
-        //         let userDetails = await User.findOne({ where: {id: user2},  select: constants.GET_USER_FIELDS }).populate('posts').populate('comments').populate('follwers', { select: constants.GET_USER_FIELDS }).populate('following', { select: constants.GET_USER_FIELDS }).populate('likedPosts')
-
-        //         console.log('Details',userDetails);
-
-        //         return res.status(200).json({
-        //             status: 200,
-        //             data: userDetails,
-        //             message: "All the Detail of user"
-        //         })
-        //     }else{
-        //         return res.json({
-        //             message: 'You not follow this user'
-        //         })
-        //     }
-        // }else{
-        //     return res.json({
-        //         message: 'You not follow this user'
-        //     })
-        // }
-        
 
         // showing the user2 profile
         let userDetails = await User.findOne({ where: {id: user2},  select: constants.GET_USER_FIELDS }).populate('posts').populate('comments').populate('follwers', { select: constants.GET_USER_FIELDS }).populate('following', { select: constants.GET_USER_FIELDS })
@@ -630,16 +576,6 @@ module.exports = {
             }
         }
 
-        // await User.removeFromCollection(user2, 'follwers',user1)
-        // await User.removeFromCollection(user1, 'following',user2)
-
-        // let follwers = await User.findOne({ where: {id: user1},  select: constants.GET_USER_FIELDS }).populate('following', { select: constants.GET_USER_FIELDS })
-
-        // return res.status(200).json({
-        //     status: 200,
-        //     data: follwers,
-        //     message: 'following of users'
-        // })
     },
 
     // view all followers

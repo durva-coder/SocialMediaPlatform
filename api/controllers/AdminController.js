@@ -10,46 +10,7 @@ const { constants } = require('../../config/constants');
 
 module.exports = {
   
-    // admin signup 
-    signup: async function(req, res){
-        let email = req.body.email;
-        let password = req.body.password;
-        console.log('admin details', req.body);
-
-        let adminExist = await Admin.find({email})
-        if(adminExist.length > 0){
-            return res.status(500).json({
-                status: 500,
-                message: 'Email already exists'
-            })
-        }
-
-        Admin.create({
-            email: email,
-            password: password
-        }).fetch().then(result =>{
-            console.log('result', result);
-            const token = jwt.sign({
-                adminId: result.id
-            },
-            process.env.JWT_TOKEN
-            );
-            res.cookie("access_token", token, { // cookie used for signup and logout
-                httpOnly: true,
-                
-            })
-            console.log('token',token);
-            console.log('hfhtfhy',process.env.JWT_TOKEN);
-            return res.json({
-                status: 200,
-                data: result,
-                message: 'Admin signup successfully'
-            })
-            // res.ok('admin signup successful')
-        })
-
-    },
-
+    
     // admin login 
     login: function(req, res){
         const { email, password } = req.body;
