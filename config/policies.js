@@ -20,7 +20,6 @@ module.exports.policies = {
   // '*': true,
   AdminController: {
     '*': 'isAuthenticated',
-    signup: true,
     login: true,
     logout: true,
 
