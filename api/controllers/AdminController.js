@@ -70,6 +70,10 @@ module.exports = {
                     
                 }
             });
+        }).catch((err)=>{
+            return res.status(400).json({
+                err:err
+            })
         })
     },
 
@@ -80,12 +84,17 @@ module.exports = {
          return res.status(200).json({
             status: 200,
             message: 'Admin logout successfully'
+        }).catch((err)=>{
+            return res.status(400).json({
+                err:err
+            })
         })
         
     },
 
     // list all the users by searching and pagination
     listUsers: async function(req, res){
+        try{
 
         // getting item name or search keyword
         const { name } = req.query;
@@ -154,11 +163,18 @@ module.exports = {
                 message: 'Please enter any query'
             })
         }
+    }catch(err){
+        return res.status(400).json({
+            err:err
+        })
+    }
 
     },
 
     // listing all posts of particular user
     listAllPosts: async function(req, res){
+        try{
+
         // getting the search keyword
         let name = req.query.name;
         console.log(name);
@@ -183,10 +199,17 @@ module.exports = {
             data: result1,
             message: "All the Posts"
         })
+    }catch(err){
+        return res.status(400).json({
+            err:err
+        })
+    }
     },
 
     // user active/ inactive
     isActiveStatus: async function(req, res){
+        try{
+
         // getting user id whom status needs to change
         let userId = req.query.userId;
         console.log(userId);
@@ -204,7 +227,11 @@ module.exports = {
             data: result1,
             message: 'Change status'
         })
-
+    }catch(err){
+        return res.status(400).json({
+            err:err
+        })
+    }
         
     },
 

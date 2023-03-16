@@ -12,8 +12,8 @@ module.exports = function(req, res, proceed){
             })
         }
 
-        console.log('jfghghg',token);
-        console.log('hfhtfhy',process.env.JWT_TOKEN);
+        console.log(token);
+        console.log(process.env.JWT_TOKEN);
         // verify jwt authorisation
         const decoded = jwt.verify(token, process.env.JWT_TOKEN); 
         console.log("decoded",decoded);

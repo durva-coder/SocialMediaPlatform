@@ -12,6 +12,9 @@ module.exports = {
   
     // user signup 
     userSignup: async function(req, res){
+
+        try{
+        
         // getting the data from req.body
         const {email, password, name, profilePic} = req.body;
   
@@ -74,10 +77,17 @@ module.exports = {
             })
         })
         });
+    }catch(err){
+        return res.status(400).json({
+            err: err
+        })
+    }
     },
 
     // user login 
     userLogin: function(req, res){
+
+        try{        
         // getting data from req.body
         const { email, password } = req.body;
 
@@ -135,23 +145,38 @@ module.exports = {
                     })
                     
                 }
+            }).catch((err)=>{
+                return res.status(400).json({
+                    err:err
+                })
             });
         })
+    }catch(err){
+        return res.status(400).json({
+            err: err
+        })
+    }
     },
 
     // user logout
     userLogout: function(req, res){
+    
         // clear cookie for logout
          res.clearCookie('access_token');
          return res.status(200).json({
             status: 200,
             message: 'User logout successfully'
+        }).catch((err)=>{
+            return res.status(400).json({
+                err:err
+            })
         })
         
     },
 
     // change password
     changePassword: async function(req, res){
+        try{
         // getting user's id from middleware 
         let userId = req.userData.userId;
         console.log(userId);
@@ -188,11 +213,18 @@ module.exports = {
             });
   
         });
+    }catch(err){
+        return res.status(400).json({
+            err:err
+        })
+    }
 
     },
 
     // updating user's profile
     updateProfile: async function(req, res){
+        try{
+
         // getting user's id from middleware
         let userId = req.userData.userId;
         console.log(userId);
@@ -252,12 +284,23 @@ module.exports = {
                 data: result1,
                 message: "Profile Updated Successfully"
             })
+        }).catch((err)=>{
+            return res.status(400).json({
+                err:err
+            })
         });
+    }catch(err){
+        return res.status(400).json({
+            err:err
+        })
+    }
 
     },
 
     // creating a post
     createPost: async function(req, res){
+        try{
+
         // getting userId from middleware
         let userId = req.userData.userId;
         console.log(userId);
@@ -295,11 +338,18 @@ module.exports = {
                 })
             })
         });
+    }catch(err){
+        return res.status(400).json({
+            err:err
+        })
+    }
 
     },
 
     // list all the posts in paginations
     listPost: async function(req, res){
+        try{
+
         // getting the limit & skip from query
         let skip = req.query.skip
         console.log(skip);
@@ -319,10 +369,16 @@ module.exports = {
             data: posts,
             message: "All the Posts"
         })
+    }catch(err){
+        return res.status(400).json({
+            err:err
+        })
+    }
     },
 
     // like posts
     likesPosts: async function(req, res){
+        try{
         // current logged in user id
         let user1 = req.userData.userId; 
         console.log('user login id',user1);
@@ -372,10 +428,16 @@ module.exports = {
             data: post2,
             message: 'Post Liked'
         })
+    }catch(err){
+        return res.status(400).json({
+            err:err
+        })
+    }
     },
 
     // disliked the post
     dislikesPosts: async function(req, res){
+        try{
         // getting current logged in user id
         let user1 = req.userData.userId; 
         console.log('user login id',user1);
@@ -394,7 +456,6 @@ module.exports = {
         console.log(getPosts);
         console.log(ids);
 
-    
         // checking id is already present in post's likes
         if(ids.length > 0){
             let isLiked = ids.some((idObj) => {
@@ -424,11 +485,18 @@ module.exports = {
                 message: 'You have not Liked the Post'
             })
         }
+    }catch(err){
+        return res.status(400).json({
+            err:err
+        })
+    }
 
     },
 
     // add comments to posts
     addComments: async function(req, res){
+        try{
+
         // getting current logged in user id
         let user1 = req.userData.userId; 
         console.log('user login id',user1);
@@ -473,12 +541,18 @@ module.exports = {
                 message: 'Comment Added'
             })
         })
-
+    }catch(err){
+        return res.status(400).json({
+            err:err
+        })
+    }
 
     },
 
     // view other user's profile
     viewUserProfile: async function(req, res){
+        try{
+
         // current logged in user
         let user1 = req.userData.userId;
         console.log('user1 Id',user1);
@@ -497,10 +571,17 @@ module.exports = {
             data: userDetails,
             message: "All the Detail of user"
         })
+    }catch(err){
+        return res.status(400).json({
+            err:err
+        })
+    }
     },
 
     // add the followers
     addFollowers: async function(req, res){
+        try{
+
         // current logged in user
         let user1 = req.userData.userId;
         console.log('user1 Id',user1);
@@ -535,10 +616,17 @@ module.exports = {
             data: follwers,
             message: 'following of users'
         })
+    }catch(err){
+        return res.status(400).json({
+            err:err
+        })
+    }
     },
 
     // remove from followers
     removeFollwers: async function(req, res){
+        try{
+
         // current logged in user
         let user1 = req.userData.userId;
         console.log('user1 Id',user1);
@@ -575,11 +663,18 @@ module.exports = {
                 }
             }
         }
+    }catch(err){
+        return res.status(400).json({
+            err:err
+        })
+    }
 
     },
 
     // view all followers
     viewAllFollwers: async function(req, res){
+        try{
+
         // current logged in user id
         let user1 = req.userData.userId;
         console.log('user1 Id',user1);
@@ -591,10 +686,17 @@ module.exports = {
             data: follwers,
             message: 'followers of users'
         })
+    }catch(err){
+        return res.status(400).json({
+            err:err
+        })
+    }
     },
 
     // view all following
     viewAllFollowing: async function(req, res){
+        try{
+
         // current logged in user
         let user1 = req.userData.userId;
         console.log('user1 Id',user1);
@@ -606,6 +708,12 @@ module.exports = {
             data: follwing,
             message: 'following of users'
         })
+    }catch(err){
+        return res.status(400).json({
+            err:err
+        })
+    }
+
     },
 
 };
