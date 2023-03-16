@@ -145,11 +145,7 @@ module.exports = {
                     })
                     
                 }
-            }).catch((err)=>{
-                return res.status(400).json({
-                    err:err
-                })
-            });
+            })
         })
     }catch(err){
         return res.status(400).json({
