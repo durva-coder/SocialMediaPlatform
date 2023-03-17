@@ -97,10 +97,10 @@ module.exports = {
 
         // getting item name or search keyword
         const { name } = req.query;
-        console.log('uyu',name);
+        console.log(name);
 
         const { email } = req.query;
-        console.log('uyu',email);
+        console.log(email);
 
         // getting skip & limit for pagination
         let skip = req.query.skip
@@ -116,6 +116,11 @@ module.exports = {
             })
 
             console.log(result);
+            if(!result){
+                return res.status(500).json({
+                    message: 'User not exists'
+                })
+            }
             const { password, ...result1} = result
             return res.status(200).json({
                 status:200,
@@ -144,22 +149,44 @@ module.exports = {
 
         // Pagination
         if(skip && limit){
-           
+            var total = await User.count({});
+            console.log(total);
             let user = await User.find({select: constants.GET_USER_FIELDS}).limit(limit).skip(skip*limit);
 
             return res.status(200).json({
                 status: 200,
                 data: user,
-                
+                totalUser: total
             })
         
         }
 
-        // otherwise enter any query
+        // Pagination
+        if(skip == 'undefined' || limit == 'undefined'){
+            var total = await User.count({});
+            console.log(total);
+           limit =10;
+           skip = 0;
+            let user = await User.find({select: constants.GET_USER_FIELDS}).limit(limit).skip(skip*limit);
+
+            return res.status(200).json({
+                status: 200,
+                data: user,
+                totalUser: total
+            })
+        
+        }
+
+        // otherwise shows all the users
         else{
-            return res.status(400).json({
-                status:400,
-                message: 'Please enter any query'
+            var total = await User.count({});
+            console.log(total);
+            let user = await User.find({select: constants.GET_USER_FIELDS})
+
+            return res.status(200).json({
+                status: 200,
+                data: user,
+                totalUser: total
             })
         }
     }catch(err){

@@ -74,10 +74,10 @@ module.exports.routes = {
   'POST /addFollowers' : 'UserController.addFollowers',
 
   // user unfollow other user
-  'POST /removeFollwers' : 'UserController.removeFollwers',
+  'POST /removefollowers' : 'UserController.removefollowers',
 
   // user view all followers
-  'GET /viewAllFollwers' : 'UserController.viewAllFollwers',
+  'GET /viewAllfollowers' : 'UserController.viewAllfollowers',
 
   // user view all following
   'GET /viewAllFollowing' : 'UserController.viewAllFollowing',

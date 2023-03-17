@@ -42,14 +42,14 @@ module.exports = {
       via: 'likes'
     },
     // reflexive association of user
-    follwers:{
+    followers:{
       collection: 'user',
       via: 'following'
     },
     // reflexive association of user
     following:{
       collection: 'user',
-      via: 'follwers'
+      via: 'followers'
     },
     isActive:{
       type: 'boolean',

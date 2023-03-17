@@ -347,16 +347,36 @@ module.exports = {
         // getting posts of logged in users
         let userId = req.userData.userId;
 
-        // list the post who currently logged in
-        let posts = await User.findOne({where:{id : userId},  select: constants.GET_USER_FIELDS})
-        .populate('posts', {sort: 'createdAt DESC', limit:limit, skip:limit*skip})
+        if(limit && skip){
 
-        console.log(posts);
-        return res.status(200).json({
-            status: 200,
-            data: posts,
-            message: "All the Posts"
-        })
+            // list the post who currently logged in
+            let posts = await User.findOne({where:{id : userId},  select: constants.GET_USER_FIELDS})
+            .populate('posts', {sort: 'createdAt DESC', limit:limit, skip:limit*skip}).populate('likedPosts');
+            console.log(posts.posts.length);
+            // console.log(posts);
+            return res.status(200).json({
+                status: 200,
+                data: posts,
+                totalPosts : posts.posts.length,
+                message: "All the Posts"
+            })
+        }
+
+        if(limit == undefined || skip == undefined){
+            limit = 10;
+            skip = 0;
+            // list the post who currently logged in
+            let posts = await User.findOne({where:{id : userId},  select: constants.GET_USER_FIELDS})
+            .populate('posts', {sort: 'createdAt DESC', limit:limit, skip:limit*skip}).populate('likedPosts');
+
+            // console.log(posts);
+            return res.status(200).json({
+                status: 200,
+                data: posts,
+                totalPosts : posts.posts.length,
+                message: "All the Posts"
+            })
+        }
     }catch(err){
         return res.status(400).json({
             err:err
@@ -550,7 +570,7 @@ module.exports = {
         console.log('user2', user2);
 
         // showing the user2 profile
-        let userDetails = await User.findOne({ where: {id: user2},  select: constants.GET_USER_FIELDS }).populate('posts').populate('comments').populate('follwers', { select: constants.GET_USER_FIELDS }).populate('following', { select: constants.GET_USER_FIELDS })
+        let userDetails = await User.findOne({ where: {id: user2},  select: constants.GET_USER_FIELDS }).populate('posts').populate('comments').populate('followers', { select: constants.GET_USER_FIELDS }).populate('following', { select: constants.GET_USER_FIELDS }).populate('likedPosts');
 
         console.log('Details',userDetails);
 
@@ -579,9 +599,9 @@ module.exports = {
         console.log('user2', user2);
 
         // checking the condition if already like the user or not
-        let follwersCheck = await User.findOne({ where: {id: user1},  select: constants.GET_USER_FIELDS }).populate('following', { select: ['id'] })
-        let ids = follwersCheck.following;
-        console.log(follwersCheck);
+        let followersCheck = await User.findOne({ where: {id: user1},  select: constants.GET_USER_FIELDS }).populate('following', { select: ['id'] })
+        let ids = followersCheck.following;
+        console.log(followersCheck);
         console.log(ids);
 
         if(ids.length > 0){
@@ -595,13 +615,13 @@ module.exports = {
         }
 
         // if not follow the user then follow - add the user id
-        await User.addToCollection(user2, 'follwers', user1)
+        await User.addToCollection(user2, 'followers', user1)
 
-        let follwers = await User.findOne({ where: {id: user1},  select: constants.GET_USER_FIELDS }).populate('following', { select: constants.GET_USER_FIELDS })
+        let followers = await User.findOne({ where: {id: user1},  select: constants.GET_USER_FIELDS }).populate('following', { select: constants.GET_USER_FIELDS })
 
         return res.status(200).json({
             status: 200,
-            data: follwers,
+            data: followers,
             message: 'following of users'
         })
     }catch(err){
@@ -612,7 +632,7 @@ module.exports = {
     },
 
     // remove from followers
-    removeFollwers: async function(req, res){
+    removefollowers: async function(req, res){
         try{
 
         // current logged in user
@@ -624,9 +644,9 @@ module.exports = {
         console.log('user2', user2);
 
         // checking the condition that already following the user or not
-        let follwersCheck = await User.findOne({ where: {id: user1},  select: constants.GET_USER_FIELDS }).populate('following', { select: ['id'] })
-        let ids = follwersCheck.following;
-        console.log(follwersCheck);
+        let followersCheck = await User.findOne({ where: {id: user1},  select: constants.GET_USER_FIELDS }).populate('following', { select: ['id'] })
+        let ids = followersCheck.following;
+        console.log(followersCheck);
         console.log(ids);
       
         // if true then remove the user id or unfollow the user
@@ -634,14 +654,14 @@ module.exports = {
             for(let i=0; i<ids.length; i++){
                 // console.log('kghjh', user2 == ids[0].id);
                 if(user2 == ids[i].id){
-                    await User.removeFromCollection(user2, 'follwers',user1)
+                    await User.removeFromCollection(user2, 'followers',user1)
                     
-                    let follwers = await User.findOne({ where: {id: user1},  select: constants.GET_USER_FIELDS }).populate('following', { select: constants.GET_USER_FIELDS })
+                    let followers = await User.findOne({ where: {id: user1},  select: constants.GET_USER_FIELDS }).populate('following', { select: constants.GET_USER_FIELDS })
                     await User.removeFromCollection(user1, 'following',user2)
 
                     return res.status(200).json({
                         status: 200,
-                        data: follwers,
+                        data: followers,
                         message: 'following of users'
                     })
                 }else{
@@ -660,18 +680,18 @@ module.exports = {
     },
 
     // view all followers
-    viewAllFollwers: async function(req, res){
+    viewAllfollowers: async function(req, res){
         try{
 
         // current logged in user id
         let user1 = req.userData.userId;
         console.log('user1 Id',user1);
 
-        let follwers = await User.findOne({ where: {id: user1},  select: constants.GET_USER_FIELDS }).populate('follwers', { select: constants.GET_USER_FIELDS })
+        let followers = await User.findOne({ where: {id: user1},  select: constants.GET_USER_FIELDS }).populate('followers', { select: constants.GET_USER_FIELDS })
 
         return res.status(200).json({
             status: 200,
-            data: follwers,
+            data: followers,
             message: 'followers of users'
         })
     }catch(err){
